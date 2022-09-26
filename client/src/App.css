@@ -1,13 +1,10 @@
-.App {
-  text-align: center;
+.app {
+  max-width: 1400px;
+  margin: 5rem auto;
 }
 
-.post {
-  background-color: white;
-  width: 200px;
-  height: 100px;
-  padding: 10px;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  box-shadow: 0 4px 8px 0 #999;
+.app__posts {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
 }

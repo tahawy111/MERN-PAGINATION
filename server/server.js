@@ -23,7 +23,7 @@ app.post("/create", async (req, res) => {
 app.get("/get", async (req, res) => {
   try {
     const page = +req.query.page || 1;
-    const pageSize = +req.query.limit || 50;
+    const pageSize = +req.query.limit || 10;
     const skip = (page - 1) * pageSize;
     const total = await Post.countDocuments();
     const pages = Math.ceil(total / pageSize);
@@ -36,8 +36,7 @@ app.get("/get", async (req, res) => {
 
     return res.status(200).json({
       status: "success",
-      total,
-      count: posts.length,
+      countCurrentPages: posts.length,
       page,
       pages,
       data: posts,

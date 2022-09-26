@@ -1,42 +1,43 @@
-import { useState } from "react";
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import "./App.css";
+import Card from "./components/Card";
+import Pagination from "./components/Pagination";
 
 function App() {
+  const pageNumber = useParams().pageNumber || 1;
   const [posts, setPosts] = useState([]);
-  const [pageNumber, setPageNumber] = useState(0);
-  const [numberOfPages, setNumberOfPages] = useState(0);
-  const pages = new Array(numberOfPages).fill(null).map((v, i) => i);
-  // const [currentIndex, setCurrentIndex] = useState(0);
-  useEffect(() => {
-    fetch(`http://localhost:4000/posts?page=${pageNumber}`)
-      .then((response) => response.json())
-      .then(({ totalPages, post }) => {
-        console.log({ totalPages, post });
-        setPosts(post);
-        setNumberOfPages(totalPages);
-      });
-  }, [pageNumber]);
-  return (
-    <div className="App">
-      <h3>Page of {pageNumber + 1}</h3>
-      {posts.map((post) => (
-        <div className="post" key={post._id}>
-          <h4>{post.title}</h4>
-          <p>{post.text}</p>
-        </div>
-      ))}
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
+  const [page, setPage] = useState(pageNumber);
+  const [pages, setPages] = useState(1);
 
-      <button onClick={() => setPageNumber(0)}>&lt;&lt;</button>
-      {pages.map((pageIndex) => {
-        // setCurrentIndex(pageIndex);
-        return (
-          <button key={pageIndex} onClick={() => setPageNumber(pageIndex)}>
-            {pageIndex + 1}
-          </button>
-        );
-      })}
-      <button>&gt;&gt;</button>
+  useEffect(() => {
+    const fetchPosts = async () => {
+      try {
+        setLoading(true);
+        const res = await fetch(`http://localhost:2000/get?page=${page}`);
+        const { pages: totalPages, data } = await res.json();
+        setPages(totalPages);
+        setPosts(data);
+        setLoading(false);
+      } catch (error) {
+        setLoading(false);
+        setError("Some error occured");
+      }
+    };
+    fetchPosts();
+  }, [page]);
+
+  return (
+    <div className="app">
+      <Pagination page={page} pages={pages} changePage={setPage} />
+      <div className="app__posts">
+        {posts.map((post) => (
+          <Card key={post._id} post={post} />
+        ))}
+      </div>
+      <Pagination page={page} pages={pages} changePage={setPage} />
     </div>
   );
 }
