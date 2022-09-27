@@ -5,7 +5,7 @@ import Card from "./components/Card";
 import Pagination from "./components/Pagination";
 import ReactPaginate from "react-paginate";
 function App() {
-  const pageNumber = useParams().pageNumber || 0;
+  const pageNumber = useParams().pageNumber || 1;
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(false);

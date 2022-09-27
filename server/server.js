@@ -22,9 +22,9 @@ app.post("/create", async (req, res) => {
 
 app.get("/get", async (req, res) => {
   try {
-    const page = +req.query.page || 0;
-    const pageSize = +req.query.limit || 10;
-    const skip = page * pageSize;
+    const page = +req.query.page || 1;
+    const pageSize = +req.query.limit || 12;
+    const skip = (page - 1) * pageSize;
     const total = await Post.countDocuments();
     const pages = Math.ceil(total / pageSize);
 
