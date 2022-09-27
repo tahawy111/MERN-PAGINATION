@@ -22,9 +22,9 @@ app.post("/create", async (req, res) => {
 
 app.get("/get", async (req, res) => {
   try {
-    const page = +req.query.page || 1;
+    const page = +req.query.page || 0;
     const pageSize = +req.query.limit || 10;
-    const skip = (page - 1) * pageSize;
+    const skip = page * pageSize;
     const total = await Post.countDocuments();
     const pages = Math.ceil(total / pageSize);
 
@@ -40,6 +40,7 @@ app.get("/get", async (req, res) => {
       page,
       pages,
       data: posts,
+      total,
     });
   } catch (error) {
     return res.status(400).json({ status: "error", message: "server error" });
