@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import "./App.css";
 import Card from "./components/Card";
-import Pagination from "./components/Pagination";
-import ReactPaginate from "react-paginate";
+import { Pagination } from "@mui/material";
+
 function App() {
   const pageNumber = useParams().pageNumber || 1;
   const [posts, setPosts] = useState([]);
@@ -33,12 +33,27 @@ function App() {
 
   return (
     <div className="app">
-      <Pagination page={page} pages={pages} changePage={setPage} />
+      <Pagination
+        defaultPage={1}
+        count={pages}
+        page={page}
+        color="primary"
+        style={{ margin: "20px 0" }}
+        onChange={(e, value) => setPage(value)}
+      />
       <div className="app__posts">
         {posts.map((post) => (
           <Card key={post._id} post={post} />
         ))}
       </div>
+      <Pagination
+        defaultPage={1}
+        count={pages}
+        page={page}
+        color="primary"
+        style={{ margin: "20px 0" }}
+        onChange={(e, value) => setPage(value)}
+      />
     </div>
   );
 }
